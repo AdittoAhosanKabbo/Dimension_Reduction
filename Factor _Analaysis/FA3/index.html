@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Note: Jupyter markdown supports only a subset of HTML/CSS, no <script> tags or JS events -->
+<style>
+    /* Simple styling for Jupyter compatibility */
+    body {
+        font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .report-container {
+        background-color: white;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #eaeaea;
+    }
+    
+    h1 {
+        color: #2c3e50;
+        font-size: 2.2em;
+        margin-bottom: 10px;
+    }
+    
+    .subtitle {
+        color: #7f8c8d;
+        font-size: 1.1em;
+        margin-top: 0;
+    }
+    
+    .summary-box {
+        background-color: #f0f8ff;
+        border-left: 5px solid #3498db;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 3px;
+    }
+    
+    .section-container {
+        margin-bottom: 15px;
+        border: 1px solid #e1e4e8;
+        border-radius: 5px;
+    }
+    
+    .section-header {
+        background-color: #f1f8ff;
+        color: #2c3e50;
+        padding: 10px 15px;
+        font-weight: bold;
+        font-size: 1.1em;
+        border-bottom: 1px solid #e1e4e8;
+    }
+    
+    .section-content {
+        padding: 15px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+        text-align: left;
+        border: 1px solid #e1e4e8;
+    }
+    
+    th {
+        background-color: #f6f8fa;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    
+    .highlight {
+        font-weight: bold;
+        color: #3498db;
+    }
+    
+    .highlight-strong {
+        font-weight: bold;
+        color: #e74c3c;
+    }
+    
+    .factor-group {
+        background-color: #f8f9fa;
+        padding: 10px;
+        margin: 10px 0;
+        border-left: 4px solid #3498db;
+    }
+    
+    .factor-1 { border-left-color: #3498db; }
+    .factor-2 { border-left-color: #e74c3c; }
+    .factor-3 { border-left-color: #2ecc71; }
+    
+    .factor-name {
+        font-weight: bold;
+        margin: 0 0 10px 0;
+    }
+    
+    .factor-1 .factor-name { color: #3498db; }
+    .factor-2 .factor-name { color: #e74c3c; }
+    .factor-3 .factor-name { color: #2ecc71; }
+    
+    .factor-variables {
+        padding-left: 15px;
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 8px;
+        font-size: 0.8em;
+        color: white;
+        margin-left: 5px;
+    }
+    
+    .badge-good { background-color: #2ecc71; }
+    .badge-excellent { background-color: #3498db; }
+    
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .summary-card {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border: 1px solid #e1e4e8;
+        border-radius: 5px;
+        text-align: center;
+    }
+    
+    .summary-card-title {
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-bottom: 5px;
+    }
+    
+    .summary-card-value {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+    
+    .footer {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+        color: #7f8c8d;
+    }
+    
+    /* Simple progress bar */
+    .progress-container {
+        width: 100%;
+        height: 20px;
+        background-color: #ecf0f1;
+        border-radius: 10px;
+        margin: 15px 0;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        background-color: #3498db;
+        border-radius: 10px;
+        width: 62.4%;
+        text-align: right;
+        padding-right: 10px;
+        color: white;
+        font-weight: bold;
+        font-size: 0.8em;
+        line-height: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="report-container">
+    <div class="header">
+        <h1>📊 Factor Analysis Report</h1>
+        <p class="subtitle">Analysis of 329 observations across 9 variables</p>
+    </div>
+    
+    <div class="summary-box">
+        <h2>Executive Summary</h2>
+        <p>Analysis identified <span class="highlight-strong">3 distinct factors</span> explaining <span class="highlight-strong">62.4%</span> of total variance in the 9-variable dataset.</p>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-card-title">KMO Value</div>
+                <div class="summary-card-value">0.703</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-title">Factors Retained</div>
+                <div class="summary-card-value">3</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-title">Variance Explained</div>
+                <div class="summary-card-value">62.4%</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-title">Sample Size</div>
+                <div class="summary-card-value">329</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            1. Data Preparation
+        </div>
+        <div class="section-content">
+            <ul>
+                <li><span class="highlight">Initial Data:</span> 329 rows, 10 columns (including <code>id</code>)</li>
+                <li><span class="highlight">Columns:</span> climate, housing, health, crime, trans, educate, arts, recreate, econ, id</li>
+                <li><span class="highlight">Preprocessing:</span> Dropped <code>id</code> column</li>
+                <li><span class="highlight">Missing Values:</span> None found</li>
+                <li><span class="highlight">Final Dataset:</span> 329 rows × 9 columns</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            2. Suitability Tests
+        </div>
+        <div class="section-content">
+            <h3>Bartlett's Test of Sphericity</h3>
+            <ul>
+                <li><span class="highlight">Chi-square:</span> 839.43</li>
+                <li><span class="highlight">p-value:</span> 5.99e-153 <span class="badge badge-good">✓</span></li>
+                <li><span class="highlight">Conclusion:</span> Data is suitable for factor analysis</li>
+            </ul>
+            
+            <h3>Kaiser-Meyer-Olkin (KMO) Test</h3>
+            <ul>
+                <li><span class="highlight">KMO:</span> 0.703 <span class="badge badge-good">✓</span></li>
+                <li><span class="highlight">Conclusion:</span> Good sampling adequacy</li>
+            </ul>
+            
+            <p><b>Note:</b> KMO measures sampling adequacy. Values > 0.7 indicate good factorability.</p>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            3. Factor Determination
+        </div>
+        <div class="section-content">
+            <h3>Eigenvalues (Kaiser Criterion)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>Eigenvalue</th>
+                        <th>Retained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>3.298</td>
+                        <td><span class="highlight-strong">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>1.214</td>
+                        <td><span class="highlight-strong">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>1.196</td>
+                        <td><span class="highlight-strong">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>4-9</td>
+                        <td>< 1</td>
+                        <td>✗</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Scree plot shows an elbow at factor 4, confirming 3-factor retention.</p>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            4. Factor Loadings
+        </div>
+        <div class="section-content">
+            <h3>Factor Loadings Table</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Factor 1</th>
+                        <th>Factor 2</th>
+                        <th>Factor 3</th>
+                        <th>Main Loading</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>climate</td>
+                        <td>0.287</td>
+                        <td>0.076</td>
+                        <td class="highlight-strong">0.841</td>
+                        <td>Factor 3</td>
+                    </tr>
+                    <tr>
+                        <td>housing</td>
+                        <td class="highlight-strong">0.698</td>
+                        <td>0.153</td>
+                        <td>0.084</td>
+                        <td>Factor 1</td>
+                    </tr>
+                    <tr>
+                        <td>health</td>
+                        <td class="highlight-strong">0.744</td>
+                        <td>-0.410</td>
+                        <td>-0.020</td>
+                        <td>Factor 1</td>
+                    </tr>
+                    <tr>
+                        <td>crime</td>
+                        <td>0.471</td>
+                        <td class="highlight-strong">0.522</td>
+                        <td>0.135</td>
+                        <td>Factor 2</td>
+                    </tr>
+                    <tr>
+                        <td>trans</td>
+                        <td class="highlight-strong">0.681</td>
+                        <td>-0.156</td>
+                        <td>-0.148</td>
+                        <td>Factor 1</td>
+                    </tr>
+                    <tr>
+                        <td>educate</td>
+                        <td>0.498</td>
+                        <td class="highlight-strong">-0.498</td>
+                        <td>-0.253</td>
+                        <td>Factor 2</td>
+                    </tr>
+                    <tr>
+                        <td>arts</td>
+                        <td class="highlight-strong">0.860</td>
+                        <td>-0.115</td>
+                        <td>0.012</td>
+                        <td>Factor 1</td>
+                    </tr>
+                    <tr>
+                        <td>recreate</td>
+                        <td class="highlight-strong">0.642</td>
+                        <td>0.322</td>
+                        <td>0.044</td>
+                        <td>Factor 1</td>
+                    </tr>
+                    <tr>
+                        <td>econ</td>
+                        <td>0.298</td>
+                        <td class="highlight-strong">0.595</td>
+                        <td>-0.533</td>
+                        <td>Factor 2</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Factor Groupings</h3>
+            <div class="factor-group factor-1">
+                <p class="factor-name">Factor 1: Quality of Life/Amenities</p>
+                <div class="factor-variables">housing, health, trans, arts, recreate</div>
+            </div>
+            
+            <div class="factor-group factor-2">
+                <p class="factor-name">Factor 2: Socioeconomic</p>
+                <div class="factor-variables">crime, educate, econ</div>
+            </div>
+            
+            <div class="factor-group factor-3">
+                <p class="factor-name">Factor 3: Climate</p>
+                <div class="factor-variables">climate</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            5. Communalities
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Communality</th>
+                        <th>Interpretation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>climate</td>
+                        <td>0.795</td>
+                        <td><span class="badge badge-excellent">Excellent</span></td>
+                    </tr>
+                    <tr>
+                        <td>housing</td>
+                        <td>0.518</td>
+                        <td><span class="badge badge-good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>health</td>
+                        <td>0.722</td>
+                        <td><span class="badge badge-excellent">Excellent</span></td>
+                    </tr>
+                    <tr>
+                        <td>crime</td>
+                        <td>0.512</td>
+                        <td><span class="badge badge-good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>trans</td>
+                        <td>0.510</td>
+                        <td><span class="badge badge-good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>educate</td>
+                        <td>0.610</td>
+                        <td><span class="badge badge-good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>arts</td>
+                        <td>0.754</td>
+                        <td><span class="badge badge-excellent">Excellent</span></td>
+                    </tr>
+                    <tr>
+                        <td>recreate</td>
+                        <td>0.517</td>
+                        <td><span class="badge badge-good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>econ</td>
+                        <td>0.728</td>
+                        <td><span class="badge badge-excellent">Excellent</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Most communalities > 0.5, indicating good factor explanation of variable variance.</p>
+            
+            <p><b>Note:</b> Communalities show how much of each variable's variance is explained by the extracted factors. Higher values indicate better explanation.</p>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            6. Variance Explained
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>Variance</th>
+                        <th>Proportional Var</th>
+                        <th>Cumulative Var</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Factor 1</td>
+                        <td>3.298</td>
+                        <td>36.64%</td>
+                        <td>36.64%</td>
+                    </tr>
+                    <tr>
+                        <td>Factor 2</td>
+                        <td>1.214</td>
+                        <td>13.48%</td>
+                        <td>50.12%</td>
+                    </tr>
+                    <tr>
+                        <td>Factor 3</td>
+                        <td>1.106</td>
+                        <td>12.28%</td>
+                        <td>62.40%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><span class="highlight">Total Variance Explained:</span> 62.4%</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar">62.4%</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            7. Practical Implications
+        </div>
+        <div class="section-content">
+            <ul>
+                <li>Use factor scores for clustering or regression analysis.</li>
+                <li><span class="highlight">Factor 1 (Quality of Life/Amenities):</span> Represents living conditions and cultural resources.</li>
+                <li><span class="highlight">Factor 2 (Socioeconomic):</span> Encompasses safety, education, and economic conditions.</li>
+                <li><span class="highlight">Factor 3 (Climate):</span> Represents environmental conditions.</li>
+                <li>Consider factor rotation for clearer interpretation.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section-container">
+        <div class="section-header">
+            8. Summary Table
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Result/Interpretation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Suitability</td>
+                        <td>Bartlett's p < 0.05, KMO = 0.703 (Good)</td>
+                    </tr>
+                    <tr>
+                        <td>Factors Retained</td>
+                        <td>3 (Eigenvalues > 1, Scree plot elbow)</td>
+                    </tr>
+                    <tr>
+                        <td>Main Factor Themes</td>
+                        <td>1: Quality of Life, 2: Socioeconomic, 3: Climate</td>
+                    </tr>
+                    <tr>
+                        <td>Variance Explained</td>
+                        <td>62.4% (by 3 factors)</td>
+                    </tr>
+                    <tr>
+                        <td>Communalities</td>
+                        <td>Most > 0.5 (factors explain most variable variance)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Factor Analysis Report • Optimized for Jupyter Notebook</p>
+    </div>
+</div>
+</body>
+</html> 
